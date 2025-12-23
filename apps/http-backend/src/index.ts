@@ -1,11 +1,12 @@
-import express from "express";
+import express, { Request, Response } from "express";
 
-import {SignupSchema,SigninSchema} from "@repo/backend-common/types"
+import {SignupSchema,SigninSchema, RoomSchema} from "@repo/backend-common/types"
 import {prisma} from "@repo/database/db";
 import bcrypt, { hash } from "bcrypt";
 import 'dotenv/config';
 import  jwt  from "jsonwebtoken";
 import {JWT_SECRET} from '@repo/backendcommon/config'
+import { middleWare } from "./middleware";
 const app=express();
 app.use(express.json());
 
@@ -86,6 +87,32 @@ app.post('/api/auth/signin',async(req,res)=>{
 
 })
 
+app.post('/api/room',middleWare,async(req:Request,res:Response)=>{
+    try {
+        const Parseddata=RoomSchema.safeParse(req.body);
+        if(!Parseddata.success)return res.status(400).json({
+            message:"Incorrect Details"
+        })
+        //@ts-ignore
+        const UserId=req.userId;
+        const room = await prisma.room.create({
+            data:{
+                slug:Parseddata.data.roomId,
+                adminId:UserId
+            }
+        })
+        return res.status(200).json({
+            message:"Room Created Successfully" ,room
+        })
+        
+    } catch (error) {
+            console.error(error)
+             return res.status(500).json({
+                message:"Developer's Fault"
+             })
+    }
+
+})
 app.listen(3005,()=>{
     console.log("APP IS LIVE AT 3005 PORT")
 });
