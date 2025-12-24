@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { application, Request, Response } from "express";
 
 import {SignupSchema,SigninSchema, RoomSchema} from "@repo/backend-common/types"
 import {prisma} from "@repo/database/db";
@@ -113,6 +113,9 @@ app.post('/api/room',middleWare,async(req:Request,res:Response)=>{
     }
 
 })
+
+app.get('/api/chats/:rooId')
+
 app.listen(3005,()=>{
     console.log("APP IS LIVE AT 3005 PORT")
 });
