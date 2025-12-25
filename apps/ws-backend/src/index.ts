@@ -9,7 +9,7 @@ console.log("WebSocket server running on ws://localhost:8080");
 interface User {
     ws: WebSocket,
     userId: string,
-    rooms: string[]
+    rooms: Number[]
 }
 const users: User[] = [];
 
@@ -121,7 +121,7 @@ wss.on('connection', function connection(ws, request) {
                 }));
                 return;
             }
-            user.rooms.push(parsedData.roomId)
+            user.rooms.push(Number(parsedData.roomId))
             ws.send(JSON.stringify({
                 type: "join-room",
                 status: "success",
@@ -150,7 +150,7 @@ wss.on('connection', function connection(ws, request) {
         }
         if (parsedData.type === "chat") {
             console.log("Chat message received for room:", parsedData.roomId)
-            const roomId = parsedData.roomId;
+            const roomId = Number(parsedData.roomId);
             let message = parsedData.message;
 
             if (!roomId || !message) {
@@ -160,14 +160,21 @@ wss.on('connection', function connection(ws, request) {
                 }));
                 return;
             }
-
-            await prisma.chat.create({
-                data: {
-                    roomId,
-                    message,
-                    userId
-                }
-            })
+            try {
+                await prisma.chat.create({
+                    data: {
+                        roomId,
+                        message,
+                        userId
+                    }
+                }).catch(err=>{
+                    console.log("DB OP Failed",err)
+                })
+                
+            } catch (error) {
+                console.log(error)
+                
+            }
 
             // Broadcast to all users in the room
             let sentCount = 0;

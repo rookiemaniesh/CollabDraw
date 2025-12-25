@@ -114,7 +114,7 @@ app.post('/api/room',middleWare,async(req:Request,res:Response)=>{
 
 })
 
-app.get('/api/chats/:rooId')
+
 
 app.listen(3005,()=>{
     console.log("APP IS LIVE AT 3005 PORT")
