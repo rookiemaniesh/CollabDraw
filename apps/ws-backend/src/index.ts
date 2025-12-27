@@ -30,7 +30,7 @@ function checkUser(token: string): string | null {
         return null
     }
 }
-wss.on('connection', function connection(ws, request) {
+wss.on('connection', async function connection(ws, request) {
     console.log("========================================");
     console.log("New WS connection attempt");
     const url = request.url;
@@ -160,20 +160,48 @@ wss.on('connection', function connection(ws, request) {
                 }));
                 return;
             }
+
+            // Ensure userId is not null before saving
+            if (!userId) {
+                console.error("❌ Cannot save chat: userId is null");
+                ws.send(JSON.stringify({
+                    type: "error",
+                    message: "User not authenticated"
+                }));
+                return;
+            }
+
             try {
-                await prisma.chat.create({
+                // Check if room exists
+                const roomExists = await prisma.room.findUnique({
+                    where: { id: roomId }
+                });
+
+                if (!roomExists) {
+                    console.error("❌ Room does not exist:", roomId);
+                    ws.send(JSON.stringify({
+                        type: "error",
+                        message: `Room ${roomId} does not exist`
+                    }));
+                    return;
+                }
+
+                console.log("💾 Attempting to save chat to DB:", { roomId, message, userId });
+                const savedChat = await prisma.chat.create({
                     data: {
                         roomId,
                         message,
                         userId
                     }
-                }).catch(err=>{
-                    console.log("DB OP Failed",err)
-                })
-                
+                });
+                console.log("✅ Chat saved successfully to DB:", savedChat.id);
             } catch (error) {
-                console.log(error)
-                
+                console.error("❌ DB OP Failed:", error);
+                ws.send(JSON.stringify({
+                    type: "error",
+                    message: "Failed to save message to database"
+                }));
+                return;
             }
 
             // Broadcast to all users in the room
