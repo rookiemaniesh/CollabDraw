@@ -1,10 +1,17 @@
-
+'use client'
+import { useState } from "react";
 import styles from "./page.module.css";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  return (
+  const [roomId,setRoomId] =useState('')
+  const router=useRouter();
+     return (
     <div className={styles.page}>
-     
+    <input type="text" value={roomId} onChange={(e)=>{setRoomId(e.target.value)}} ></input>
+    <button onClick={()=>{
+      router.push(`/room/${roomId}`);
+    }}>JOIN</button>
     </div>
   );
 }
