@@ -13,5 +13,5 @@ export default function Home() {
       router.push(`/room/${roomId}`);
     }}>JOIN</button>
     </div>
-  );
+  ); 
 }
