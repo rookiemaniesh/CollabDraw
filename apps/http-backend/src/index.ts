@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-
+import cors from "cors";
 import { SignupSchema, SigninSchema, RoomSchema } from "@repo/backend-common/types"
 import { prisma } from "@repo/database/db";
 import bcrypt, { hash } from "bcrypt";
@@ -9,7 +9,7 @@ import { JWT_SECRET } from '@repo/backendcommon/config'
 import { middleWare } from "./middleware";
 const app = express();
 app.use(express.json());
-
+app.use(cors());
 
 if (!JWT_SECRET) {
     throw new Error("JWT_SECRET is not defined");

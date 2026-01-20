@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 export async function middleWare(req:Request,res:Response,next:NextFunction){
     try {
         const token=req.headers["authorization"] ?? "";
+        // console.log("This is token:"+token);
          const decoded=  jwt.verify(token,JWT_SECRET);
          if(!decoded)return res.status(400).json({
           message:"Not Logged In!"
