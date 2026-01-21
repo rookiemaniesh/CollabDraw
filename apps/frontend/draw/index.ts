@@ -19,11 +19,16 @@ export async function initDraw(canvas: HTMLCanvasElement, roomId: string, socket
     let existingShape: Shape[] = await getExistingShapes(roomId);
 
     if (!ctx) return;
+
+    // Initial render of existing shapes
+    ctx.strokeStyle = "white";
+    clearCanvas(existingShape, canvas, ctx);
+
     socket.onmessage = (event) => {
         const message = JSON.parse(event.data);
         if (message.type === "chat") {
             const parsedShape = JSON.parse(message.message);
-            existingShape.push(parsedShape);
+            existingShape.push(parsedShape.shape); // Unwrap the shape property
             clearCanvas(existingShape, canvas, ctx);
         }
     }
@@ -77,12 +82,13 @@ function clearCanvas(existingShape: Shape[], canvas: HTMLCanvasElement, ctx: Can
     })
 }
 async function getExistingShapes(roomId: string) {
-    const res = await axios.get(`${HTTP_BACKEND}/chats/${roomId}`);
-    const messages = res.data.messages;
+    console.log(roomId)
+    const res = await axios.get(`${HTTP_BACKEND}/api/chats/${roomId}`);
+    const chat = res.data.chat || []; // Backend returns 'chat', not 'messages'
 
-    const shapes = messages.map((x: { message: string }) => {
+    const shapes = chat.map((x: { message: string }) => {
         const messageData = JSON.parse(x.message);
-        return messageData;
+        return messageData.shape; // Unwrap the shape property
     })
     return shapes;
 };

@@ -6,9 +6,10 @@ import { useEffect, useState } from "react"
 
 export function RoomCanvas({ roomId }: { roomId: string }) {
     const [socket, setSocket] = useState<WebSocket | null>(null);
-    const token = localStorage.getItem('token');
+
     useEffect(() => {
-        const ws = new WebSocket(`${WS_URL}?${token}`)
+        const token = localStorage.getItem('token');
+        const ws = new WebSocket(`${WS_URL}?token=${token}`)
         ws.onopen = () => {
             setSocket(ws);
             const data = JSON.stringify({
@@ -17,7 +18,7 @@ export function RoomCanvas({ roomId }: { roomId: string }) {
             });
             ws.send(data);
         }
-    }, [])
+    }, [roomId])
     if (!socket) {
         return <div>
             Connecting to server......
