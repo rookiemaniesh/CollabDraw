@@ -20,12 +20,12 @@ export function RoomCanvas({ roomId }: { roomId: string }) {
         }
     }, [roomId])
     if (!socket) {
-        return <div>
+        return <div className="h-screen w-screen flex items-center justify-center text-white bg-neutral-950">
             Connecting to server......
         </div>
     }
 
-    return <div>
+    return <div className="h-screen w-screen overflow-hidden">
         <Canvas roomId={roomId} socket={socket} />
     </div>
 
