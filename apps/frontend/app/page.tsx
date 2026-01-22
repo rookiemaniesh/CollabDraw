@@ -2,265 +2,190 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight, Play, Globe, MessageSquare, Menu, X, Pencil, Sparkles, Brain, HandMetal, Smile, StickyNote, Video } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col bg-white text-black selection:bg-black selection:text-white">
-      {/* Hero Section with Full Background */}
-      <section className="relative h-screen w-full overflow-hidden text-white">
-        {/* Background Image */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/hero.avif"
-            alt="Hero Background"
-            fill
-            className="object-cover object-center"
-            priority
-          />
-          {/* Overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/10" />
+    <div className="min-h-screen bg-[#121212] text-white selection:bg-pink-500 selection:text-white font-sans overflow-x-hidden">
+
+      {/* Background Gradients */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-pink-500/10 blur-[120px] rounded-full" />
+        <div className="absolute top-[20%] right-[-10%] w-[40%] h-[60%] bg-blue-500/10 blur-[120px] rounded-full" />
+      </div>
+
+      {/* Navbar */}
+      <nav className="relative z-50 flex h-20 w-full items-center justify-between px-6 md:px-12 max-w-7xl mx-auto">
+        <div className="flex items-center gap-2">
+          <div className="w-15">
+          <img src="/logocb.jpg-removebg-preview.png" alt="" />
+          </div>
+
+          <span className="text-xl font-bold tracking-tight">CollabBoard</span>
         </div>
 
-        {/* Navbar (Transparent) */}
-        <nav className="relative z-10 flex h-20 w-full items-center justify-between px-8 md:px-12">
-          <div className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/30 bg-white/10 backdrop-blur-md">
-              <span className="font-bold">CB</span>
+        {/* Mobile Menu Button */}
+        <button className="md:hidden p-2 text-gray-300 hover:text-white">
+          <Menu className="w-6 h-6" />
+        </button>
+
+        {/* Desktop Links */}
+        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
+          <Link href="https://github.com/rookiemaniesh/CollabDraw" className="hover:text-white transition-colors">Github</Link>
+          <Link
+            href="/signin"
+            className="px-6 py-2 rounded-full bg-[#1E1E1E] text-white border border-gray-800 hover:bg-[#2a2a2a] transition-all hover:border-gray-700 font-semibold"
+          >
+            Login
+          </Link>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <main className="relative z-10 flex flex-col items-center justify-center pt-20 px-6 pb-20">
+
+        {/* Floating Decorative Elements Top */}
+        
+
+        <div className="absolute top-28 left-[15%] hidden md:block animate-float">
+          <Brain className="w-12 h-12 text-gray-400 stroke-[1.5]" />
+        </div>
+
+        <div className="absolute top-32 right-[15%] hidden md:block animate-bounce-slow">
+          <div className="relative">
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
+            <div className="w-12 h-12 rounded-full border-2 border-gray-700 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full border-2 border-gray-700 flex items-center justify-center">
+                <div className="w-2 h-2 bg-gray-700 rounded-full"></div>
+              </div>
+              <div className="absolute -right-2 top-0 rotate-12">
+                <Video className="w-6 h-6 text-gray-400" />
+              </div>
             </div>
           </div>
-          <div className="hidden items-center gap-8 md:flex">
-            {/* Burger menu icon similar to reference */}
-            <button className="p-2 text-white hover:opacity-80">
-              <svg width="40" height="20" viewBox="0 0 40 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="40" height="2" fill="white" />
-                <rect y="18" width="40" height="2" fill="white" />
+        </div>
+
+        {/* Main Title */}
+        <div className="max-w-4xl mx-auto text-center space-y-6 relative">
+          <h1 className="text-2xl md:text-3xl lg:text-5xl font-bold leading-tight tracking-tight text-white mb-8">
+            An Intuitive Online <span className="relative inline-block text-yellow-300">
+              Whiteboard
+              {/* <svg className="absolute w-full h-3 -bottom-1 left-0 text-yellow-300/30" viewBox="0 0 100 10" preserveAspectRatio="none">
+                <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" />
+              </svg> */}
+            </span> For
+            <br className="hidden md:block" />
+            Teams To Ideate And Collaborate
+            <br className="hidden md:block" />
+            In <span className="relative inline-block text-pink-400">
+              Real-Time
+              {/* <span className="absolute w-full h-4 -bottom-1 left-0 bg-pink-500/20 -rotate-1 rounded-sm -z-10"></span> */}
+            </span> [BETA]
+          </h1>
+
+          {/* CTA Area with Arrows and Floating Elements */}
+          <div className="relative inline-block mt-12 mb-20">
+            {/* Left Arrow */}
+            {/* <div className="absolute -left-72 top-1/2 -translate-y-1/2 hidden md:block">
+              <svg width="100" height="60" viewBox="0 0 100 60" fill="none" className="text-gray-500 -rotate-12">
+                <path d="M80 10 C 50 10, 20 40, 20 50" stroke="currentColor" strokeWidth="2" strokeDasharray="5,5" />
+                <path d="M20 50 L 15 40 M 20 50 L 30 45" stroke="currentColor" strokeWidth="2" />
               </svg>
-            </button>
-          </div>
-        </nav>
+            </div> */}
+            {/* Right Arrow */}
+            {/* <div className="absolute -right-32 top-0 hidden md:block">
+              <svg width="80" height="50" viewBox="0 0 80 50" fill="none" className="text-gray-500 rotate-12">
+                <path d="M20 40 C 40 40, 60 20, 70 10" stroke="currentColor" strokeWidth="2" />
+                <path d="M70 10 L 60 10 M 70 10 L 70 20" stroke="currentColor" strokeWidth="2" />
+              </svg>
+            </div> */}
 
-        {/* Main Content Grid */}
-        <div className="relative z-10 flex h-[calc(100vh-80px)] w-full flex-col justify-between px-8 pb-12 pt-10 md:px-12 md:pb-16">
-
-          {/* Center/Top: Massive Title */}
-          <div className="flex flex-1 flex-col items-center justify-center">
-            <h1 className="w-full text-center text-[12vw] font-bold leading-none tracking-tighter sm:text-[15vw]">
-              CollabBoard
-            </h1>
-          </div>
-
-          {/* "Since" Text - Positioned relatively to match visual hierarchy */}
-          <div className="absolute left-8 top-1/2 -translate-y-12 text-lg font-medium tracking-wide md:left-12 md:text-xl">
-            Since 2026
-          </div>
-
-          {/* Bottom Section: Grid for Description and CTA */}
-          <div className="grid w-full grid-cols-1 items-end gap-12 md:grid-cols-2">
-
-            {/* Bottom Left: Description */}
-            <div className="max-w-lg">
-              <p className="text-xl font-medium leading-relaxed md:text-2xl">
-                We are a creative platform for teams building brands and systems that stand out, scale with growth and deliver measurable results.
-              </p>
-            </div>
-
-            {/* Bottom Right: Stats and CTA */}
-            <div className="flex flex-col items-start justify-end gap-6 md:items-end">
-              <div className="flex flex-col items-start gap-1 text-right md:items-end">
-                <div className="flex items-center gap-1 text-yellow-400">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <svg key={star} className="h-5 w-5 fill-current" viewBox="0 0 24 24">
-                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                    </svg>
-                  ))}
-                  <span className="ml-2 text-white font-semibold">4.8/5</span>
-                </div>
-                <p className="font-medium text-white/90">3.2x Average ROI</p>
+            {/* Video Play Button Floating */}
+            {/* <div className="absolute -left-60 -top-16 hidden md:block animate-float">
+              <div className="w-12 h-10 border-2 border-gray-600 rounded-lg flex items-center justify-center rotate-[-15deg]">
+                <Play className="w-4 h-4 fill-current text-gray-400" />
               </div>
+            </div> */}
 
-              <div className="flex w-full items-center gap-4 md:w-auto">
-                <Link
-                  href="/signin"
-                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-white px-8 py-4 text-lg font-bold text-black transition-transform hover:scale-105 md:w-auto"
-                >
-                  Start your project
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </Link>
-              </div>
-            </div>
+            {/* OK Hand Floating */}
+            {/* <div className="absolute -right-24 -top-10 hidden md:block animate-float-slow">
+              <div className="text-4xl rotate-12">👌</div>
+              <div className="absolute -top-4 -right-4 bg-black text-white text-xs font-bold px-2 py-1 rounded-full border border-gray-700 -rotate-12">OK!</div>
+            </div> */}
+
+            <Link
+              href="/signin"
+              className="relative z-20 px-10 py-4 bg-[#2D2D2D] hover:bg-[#3d3d3d] text-white text-lg font-bold rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-pink-500/20 border border-gray-700"
+            >
+              Start For Free
+            </Link>
           </div>
         </div>
-      </section>
 
-      <main className="flex-1">
-        {/* Features Bento Grid */}
-        <section id="features" className="bg-gray-50 px-6 py-24">
-          <div className="mx-auto max-w-7xl space-y-12">
-            <div className="text-center">
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-blue-600">Features</h2>
-              <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                Everything you need to visualize logic.
-              </p>
-            </div>
+      
+        
 
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:grid-rows-2 h-auto md:h-[600px]">
-              {/* Feature 1 - Large Left */}
-              <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm transition-shadow hover:shadow-md md:col-span-2 md:row-span-2">
-                <div className="absolute right-0 top-0 h-full w-1/2 translate-x-1/4 bg-blue-50/50 rounded-full blur-3xl" />
-                <div className="relative z-10 h-full flex flex-col justify-between">
-                  <div>
-                    <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-black text-white">
-                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-900">Infinite Canvas</h3>
-                    <p className="mt-4 max-w-md text-gray-500">
-                      Never run out of space. Our infinite canvas scales with your ideas, from simple sketches to complex system architectures.
-                    </p>
-                  </div>
-                  {/* Placeholder for a UI mockup */}
-                  <div className="mt-8 h-64 w-full rounded-xl border border-gray-100 bg-gray-50 shadow-sm relative overflow-hidden">
-                    <div className="absolute inset-4 rounded-lg bg-white shadow-sm flex items-center justify-center">
-                      <span className="text-gray-300 font-medium">Interactive Demo Area</span>
-                    </div>
-                  </div>
+        {/* Laptop Mockup Container */}
+        <div className="relative w-full max-w-5xl mx-auto perspective-1000">
+          {/* Cursors hovering over laptop */}
+          {/* <div className="absolute -top-10 left-[20%] z-20 hidden md:block animate-float-slow">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="white" stroke="black" strokeWidth="2" className="drop-shadow-lg">
+              <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z" />
+            </svg>
+          </div>
+          <div className="absolute top-[30%] -right-[5%] z-20 hidden md:block animate-float">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="#EC4899" stroke="white" strokeWidth="2" className="drop-shadow-lg">
+              <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z" />
+            </svg>
+            <div className="absolute top-6 left-4 bg-[#EC4899] text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">Sarah</div>
+          </div> */}
+
+          <div className="relative z-10 rounded-xl overflow-hidden shadow-2xl shadow-purple-500/20 border border-gray-800 bg-[#0a0a0a]">
+            {/* Browser Bar Mockup */}
+            <div className="h-8 bg-[#1a1a1a] flex items-center px-4 gap-2 border-b border-gray-800">
+              <div className="flex gap-1.5">
+                <div className="w-3 h-3 rounded-full bg-red-500/20"></div>
+                <div className="w-3 h-3 rounded-full bg-yellow-500/20"></div>
+                <div className="w-3 h-3 rounded-full bg-green-500/20"></div>
+              </div>
+              <div className="flex-1 flex justify-center">
+                <div className="px-3 py-0.5 bg-[#0a0a0a] rounded-md text-[10px] text-gray-500 flex items-center gap-1 w-64 justify-center border border-gray-800">
+                  <span className="w-2 h-2 rounded-full bg-gray-700"></span>
+                  CollabBoard.pierates.dev
                 </div>
               </div>
+            </div>
 
-              {/* Feature 2 - Top Right */}
-              <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm transition-shadow hover:shadow-md">
-                <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100 text-purple-600">
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                </div>
-                <h3 className="text-xl font-bold text-gray-900">Real-time Sync</h3>
-                <p className="mt-2 text-sm text-gray-500">
-                  Collaborate with your team instantly. Changes reflect in milliseconds.
-                </p>
-              </div>
-
-              {/* Feature 3 - Bottom Right */}
-              <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm transition-shadow hover:shadow-md">
-                <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-orange-100 text-orange-600">
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                </div>
-                <h3 className="text-xl font-bold text-gray-900">Secure by Design</h3>
-                <p className="mt-2 text-sm text-gray-500">
-                  Your ideas are safe. Enterprise-grade encryption for all your projects.
-                </p>
-              </div>
+            {/* Laptop Image */}
+            <div className="relative aspect-[16/10] bg-black">
+              <Image
+                src="/laptop_mockup.png"
+                alt="CollabBoard Interface"
+                fill
+                className="object-cover"
+                priority
+              />
             </div>
           </div>
-        </section>
+          {/* Glow Effect behind laptop */}
+          <div className="absolute -inset-4 bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-blue-500/20 blur-2xl -z-10 rounded-xl"></div>
+        </div>
 
-        {/* FAQ Section */}
-        <section className="px-6 py-24 bg-white">
-          <div className="mx-auto max-w-3xl space-y-12">
-            <div className="text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900">Frequently Asked Questions</h2>
-            </div>
-            <div className="space-y-4">
-              <details className="group rounded-2xl border border-gray-100 bg-gray-50 p-6 [&_summary::-webkit-details-marker]:hidden">
-                <summary className="flex cursor-pointer items-center justify-between gap-1.5 text-gray-900">
-                  <h3 className="text-lg font-medium">Is CollabBoard free to use?</h3>
-                  <span className="relative size-5 shrink-0">
-                    <svg
-                      className="absolute inset-0 size-5 opacity-100 group-open:opacity-0 transition-opacity"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <svg
-                      className="absolute inset-0 size-5 opacity-0 group-open:opacity-100 transition-opacity"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </span>
-                </summary>
-                <p className="mt-4 leading-relaxed text-gray-600">
-                  Yes! You can create unlimited public canvases for free. We offer premium plans for private teams and advanced security features.
-                </p>
-              </details>
-
-              <details className="group rounded-2xl border border-gray-100 bg-gray-50 p-6 [&_summary::-webkit-details-marker]:hidden">
-                <summary className="flex cursor-pointer items-center justify-between gap-1.5 text-gray-900">
-                  <h3 className="text-lg font-medium">Can I collaborate in real-time?</h3>
-                  <span className="relative size-5 shrink-0">
-                    <svg
-                      className="absolute inset-0 size-5 opacity-100 group-open:opacity-0 transition-opacity"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <svg
-                      className="absolute inset-0 size-5 opacity-0 group-open:opacity-100 transition-opacity"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </span>
-                </summary>
-                <p className="mt-4 leading-relaxed text-gray-600">
-                  Absolutely. All drawing and edits happen in real-time, so you can see exactly what your team is thinking as they type or draw.
-                </p>
-              </details>
-            </div>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="px-6 py-24">
-          <div className="mx-auto max-w-5xl rounded-3xl bg-black px-6 py-16 text-center text-white sm:px-12">
-            <h2 className="mx-auto max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">
-              Ready to bring your ideas to life?
-            </h2>
-            <p className="mx-auto mt-4 max-w-xl text-lg text-gray-400">
-              Join thousands of teams who use CollabBoard to design better systems, faster.
-            </p>
-            <div className="mt-10 flex justify-center gap-4">
-              <Link
-                href="/signup"
-                className="rounded-full bg-white px-8 py-3 text-base font-semibold text-black transition-transform hover:scale-105"
-              >
-                Get Started for Free
-              </Link>
-            </div>
-          </div>
-        </section>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-gray-100 bg-white px-6 py-12">
+      <footer className="border-t border-gray-800  px-6 py-12 mt-20">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 md:flex-row">
           <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded bg-black"></div>
             <span className="text-lg font-bold">CollabBoard</span>
           </div>
-          <div className="flex gap-8 text-sm text-gray-500">
-            <a href="#" className="hover:text-black">Privacy Policy</a>
-            <a href="#" className="hover:text-black">Terms of Service</a>
-            <a href="#" className="hover:text-black">Contact</a>
+          <div className="flex  text-sm text-gray-400">
+            Made by Manish with ♡
           </div>
-          <p className="text-sm text-gray-400">© 2026 CollabBoard Inc.</p>
+          <p className="text-sm text-gray-500">© 2026 CollabBoard Inc.</p>
         </div>
       </footer>
     </div>
   );
 }
+

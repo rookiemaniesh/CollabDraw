@@ -50,10 +50,10 @@ export default function Canvas({
         }
     }, [canvasRef, roomId, socket, canvasSize]); // Re-run when size changes to re-init context
 
-    useEffect(()=>{
+    useEffect(() => {
         //@ts-ignore
-        window.selectedTool=selectedTool
-    },[selectedTool])
+        window.selectedTool = selectedTool
+    }, [selectedTool])
 
     useEffect(() => {
         if (textInput?.visible && textInputRef.current) {
@@ -92,7 +92,7 @@ export default function Canvas({
 
         setTextInput(null);
     };
-    const router=useRouter();
+    const router = useRouter();
 
     const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
         if (selectedTool === "text" && canvasRef.current && !textInput?.visible) {
@@ -131,13 +131,13 @@ export default function Canvas({
     };
     return (
         <div className="relative h-full w-full overflow-hidden bg-neutral-950">
-            <canvas 
-                ref={canvasRef} 
-                width={canvasSize.width} 
+            <canvas
+                ref={canvasRef}
+                width={canvasSize.width}
                 height={canvasSize.height}
                 onClick={handleCanvasClick}
             ></canvas>
-            
+
             {textInput?.visible && (
                 <input
                     ref={textInputRef}
@@ -166,11 +166,11 @@ export default function Canvas({
 
             {/* Share Dialog */}
             {showShareDialog && (
-                <div 
+                <div
                     className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm"
                     onClick={() => setShowShareDialog(false)}
                 >
-                    <div 
+                    <div
                         className="bg-neutral-900 rounded-2xl p-6 md:p-8 border border-neutral-800 shadow-2xl max-w-md w-full mx-4"
                         onClick={(e) => e.stopPropagation()}
                     >
@@ -183,7 +183,7 @@ export default function Canvas({
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
-                        
+
                         <p className="text-neutral-400 text-sm mb-4">
                             Share this link to invite others to collaborate
                         </p>
@@ -198,11 +198,10 @@ export default function Canvas({
                             />
                             <button
                                 onClick={handleCopyLink}
-                                className={`px-4 py-2.5 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${
-                                    copied
+                                className={`px-4 py-2.5 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${copied
                                         ? "bg-green-600 hover:bg-green-700 text-white"
                                         : "bg-violet-600 hover:bg-violet-700 text-white"
-                                }`}
+                                    }`}
                             >
                                 {copied ? (
                                     <>
@@ -228,34 +227,34 @@ export default function Canvas({
                 </div>
             )}
 
-            <div className="fixed top-0 left-0 right-0 p-4 flex justify-between items-center bg-neutral-900/90 backdrop-blur-md border-b border-neutral-800 z-50">
+            <div className="fixed top-0 left-0 right-0 p-4 flex justify-between items-center  backdrop-blur-md  z-50">
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-violet-600 rounded-lg flex items-center justify-center text-white shadow-lg shadow-violet-600/20">
-                        <Shapes className="w-6 h-6" />
+                    <div className="w-15   rounded-lg flex items-center justify-center ">
+                        <img src="/logocb.jpg-removebg-preview.png" alt="" />
                     </div>
                     <span className="text-white font-bold text-xl tracking-tight">CollabBoard</span>
                 </div>
                 <div className="flex items-center gap-3">
-                    <button 
+                    <button
                         onClick={() => setShowShareDialog(true)}
-                        className="p-2.5 text-neutral-400 hover:text-white transition-colors bg-neutral-800 hover:bg-neutral-700 rounded-lg hover:shadow-md active:scale-95 duration-200"
+                        className="p-2.5 text-white hover:text-white transition-colors bg-gray-700 hover:bg-neutral-700 rounded-lg hover:shadow-md active:scale-95 duration-200"
                     >
                         <Share2 className="w-5 h-5" />
                     </button>
-                    <button 
-                    onClick={()=>router.push('/currentlyworking')}
-                    className="p-2.5 text-neutral-400 hover:text-white transition-colors bg-neutral-800 hover:bg-neutral-700 rounded-lg hover:shadow-md active:scale-95 duration-200">
+                    <button
+                        onClick={() => router.push('/currentlyworking')}
+                        className="p-2.5 text-white hover:text-white transition-colors bg-gray-700 hover:bg-neutral-700 rounded-lg hover:shadow-md active:scale-95 duration-200">
                         <MessageSquare className="w-5 h-5" />
                     </button>
-                    <button 
-                     onClick={()=>router.push('/currentlyworking')}
-                    className="p-2.5 text-neutral-400 hover:text-white transition-colors bg-neutral-800 hover:bg-neutral-700 rounded-lg hover:shadow-md active:scale-95 duration-200">
+                    <button
+                        onClick={() => router.push('/currentlyworking')}
+                        className="p-2.5 text-white hover:text-white transition-colors bg-gray-700 hover:bg-neutral-700 rounded-lg hover:shadow-md active:scale-95 duration-200">
                         <Settings className="w-5 h-5" />
                     </button>
                 </div>
             </div>
 
-            <div className="fixed top-1/2 left-4 -translate-y-1/2 flex flex-col gap-3 bg-neutral-900/90 p-3 rounded-xl border border-neutral-800 shadow-xl backdrop-blur-md">
+            <div className="fixed top-1/2 left-4 -translate-y-1/2 flex flex-col gap-3  p-3 rounded-xl border border-neutral-800 shadow-xl backdrop-blur-md">
                 <IconButton
                     icon={<RectangleHorizontal className="w-5 h-5" />}
                     isActive={selectedTool === "rect"}
@@ -290,8 +289,8 @@ function IconButton({ icon, onClick, isActive }: { icon: React.ReactNode, onClic
     return (
         <button
             className={`p-3 rounded-lg transition-all duration-200 ${isActive
-                ? "bg-pink-600 text-white shadow-lg shadow-violet-600/20 scale-105"
-                : "bg-neutral-800 text-neutral-400 hover:bg-neutral-700 hover:text-white"
+                ? "bg-gray-700 text-white shadow-lg shadow-white-600/20 scale-105"
+                : " text-neutral-400 hover:bg-neutral-700 hover:text-white"
                 }`}
             onClick={onClick}
         >

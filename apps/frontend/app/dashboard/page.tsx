@@ -35,7 +35,7 @@ export default function Dashboard() {
         <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-6">
             <div className="w-full max-w-4xl space-y-8">
                 <div className="text-center">
-                    <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
+                    <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
                         Dashboard
                     </h1>
                     <p className="mt-4 text-lg text-gray-600">
