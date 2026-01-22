@@ -1,6 +1,7 @@
 import { initDraw } from "@/draw";
 import { useEffect, useRef, useState } from "react";
-import { Circle, Minus, Pencil, RectangleHorizontal, Share2, MessageSquare, Settings, Shapes, Type } from "lucide-react";
+import { Circle, Minus, Pencil, RectangleHorizontal, Share2, MessageSquare, Settings, Shapes, Type, X, Check, Copy } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export type Tool = "rect" | "circle" | "line" | "pencil" | "text";
 
@@ -16,6 +17,9 @@ export default function Canvas({
     const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
     const [textInput, setTextInput] = useState<{ x: number; y: number; visible: boolean } | null>(null);
     const textInputRef = useRef<HTMLInputElement>(null);
+    const [showShareDialog, setShowShareDialog] = useState(false);
+    const [copied, setCopied] = useState(false);
+    const shareLinkRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         setCanvasSize({ width: window.innerWidth, height: window.innerHeight });
@@ -88,6 +92,7 @@ export default function Canvas({
 
         setTextInput(null);
     };
+    const router=useRouter();
 
     const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
         if (selectedTool === "text" && canvasRef.current && !textInput?.visible) {
@@ -98,6 +103,30 @@ export default function Canvas({
             const clampedX = Math.max(0, Math.min(x, canvasSize.width - 200));
             const clampedY = Math.max(0, Math.min(y, canvasSize.height - 40));
             setTextInput({ x: clampedX, y: clampedY, visible: true });
+        }
+    };
+
+    const getShareLink = () => {
+        if (typeof window !== "undefined") {
+            return `${window.location.origin}/canvas/${roomId}`;
+        }
+        return "";
+    };
+
+    const handleCopyLink = async () => {
+        const link = getShareLink();
+        try {
+            await navigator.clipboard.writeText(link);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            // Fallback for older browsers
+            if (shareLinkRef.current) {
+                shareLinkRef.current.select();
+                document.execCommand("copy");
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            }
         }
     };
     return (
@@ -135,21 +164,92 @@ export default function Canvas({
                 />
             )}
 
+            {/* Share Dialog */}
+            {showShareDialog && (
+                <div 
+                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm"
+                    onClick={() => setShowShareDialog(false)}
+                >
+                    <div 
+                        className="bg-neutral-900 rounded-2xl p-6 md:p-8 border border-neutral-800 shadow-2xl max-w-md w-full mx-4"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-xl font-bold text-white">Share Canvas</h2>
+                            <button
+                                onClick={() => setShowShareDialog(false)}
+                                className="p-1.5 text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-neutral-800"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+                        
+                        <p className="text-neutral-400 text-sm mb-4">
+                            Share this link to invite others to collaborate
+                        </p>
+
+                        <div className="flex items-center gap-2 mb-4">
+                            <input
+                                ref={shareLinkRef}
+                                type="text"
+                                readOnly
+                                value={getShareLink()}
+                                className="flex-1 px-4 py-2.5 bg-neutral-800 border border-neutral-700 rounded-lg text-white text-sm focus:outline-none focus:border-violet-600"
+                            />
+                            <button
+                                onClick={handleCopyLink}
+                                className={`px-4 py-2.5 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${
+                                    copied
+                                        ? "bg-green-600 hover:bg-green-700 text-white"
+                                        : "bg-violet-600 hover:bg-violet-700 text-white"
+                                }`}
+                            >
+                                {copied ? (
+                                    <>
+                                        <Check className="w-4 h-4" />
+                                        <span>Copied!</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Copy className="w-4 h-4" />
+                                        <span>Copy</span>
+                                    </>
+                                )}
+                            </button>
+                        </div>
+
+                        <button
+                            onClick={() => setShowShareDialog(false)}
+                            className="w-full px-4 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-white rounded-lg transition-colors font-medium"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
+
             <div className="fixed top-0 left-0 right-0 p-4 flex justify-between items-center bg-neutral-900/90 backdrop-blur-md border-b border-neutral-800 z-50">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-violet-600 rounded-lg flex items-center justify-center text-white shadow-lg shadow-violet-600/20">
                         <Shapes className="w-6 h-6" />
                     </div>
-                    <span className="text-white font-bold text-xl tracking-tight">CollabDraw</span>
+                    <span className="text-white font-bold text-xl tracking-tight">CollabBoard</span>
                 </div>
                 <div className="flex items-center gap-3">
-                    <button className="p-2.5 text-neutral-400 hover:text-white transition-colors bg-neutral-800 hover:bg-neutral-700 rounded-lg hover:shadow-md active:scale-95 duration-200">
+                    <button 
+                        onClick={() => setShowShareDialog(true)}
+                        className="p-2.5 text-neutral-400 hover:text-white transition-colors bg-neutral-800 hover:bg-neutral-700 rounded-lg hover:shadow-md active:scale-95 duration-200"
+                    >
                         <Share2 className="w-5 h-5" />
                     </button>
-                    <button className="p-2.5 text-neutral-400 hover:text-white transition-colors bg-neutral-800 hover:bg-neutral-700 rounded-lg hover:shadow-md active:scale-95 duration-200">
+                    <button 
+                    onClick={()=>router.push('/currentlyworking')}
+                    className="p-2.5 text-neutral-400 hover:text-white transition-colors bg-neutral-800 hover:bg-neutral-700 rounded-lg hover:shadow-md active:scale-95 duration-200">
                         <MessageSquare className="w-5 h-5" />
                     </button>
-                    <button className="p-2.5 text-neutral-400 hover:text-white transition-colors bg-neutral-800 hover:bg-neutral-700 rounded-lg hover:shadow-md active:scale-95 duration-200">
+                    <button 
+                     onClick={()=>router.push('/currentlyworking')}
+                    className="p-2.5 text-neutral-400 hover:text-white transition-colors bg-neutral-800 hover:bg-neutral-700 rounded-lg hover:shadow-md active:scale-95 duration-200">
                         <Settings className="w-5 h-5" />
                     </button>
                 </div>

@@ -80,7 +80,7 @@ export default function Home() {
 
               <div className="flex w-full items-center gap-4 md:w-auto">
                 <Link
-                  href="/signup"
+                  href="/signin"
                   className="flex w-full items-center justify-center gap-2 rounded-lg bg-white px-8 py-4 text-lg font-bold text-black transition-transform hover:scale-105 md:w-auto"
                 >
                   Start your project
