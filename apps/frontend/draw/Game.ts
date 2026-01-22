@@ -18,6 +18,13 @@ type Shape = {
     startY: number;
     endX: number;
     endY: number;
+} | {
+    type: "text";
+    x: number;
+    y: number;
+    value: string;
+    fontSize: number;
+    color: string;
 }
 
 export class Game {
@@ -51,7 +58,7 @@ export class Game {
         this.canvas.removeEventListener("mousemove", this.mouseMoveHandler)
     }
 
-    setTool(tool: "circle" | "line" | "rect") {
+    setTool(tool: "circle" | "line" | "rect" | "text") {
         this.selectedTool = tool;
     }
     async init() {
@@ -94,15 +101,26 @@ export class Game {
                 this.ctx.lineTo(shape.endX, shape.endY);
                 this.ctx.stroke();
                 this.ctx.closePath();
+            } else if (shape.type === "text") {
+                this.ctx.font = `${shape.fontSize}px Arial`;
+                this.ctx.fillStyle = shape.color;
+                this.ctx.fillText(shape.value, shape.x, shape.y);
             }
         })
     }
     mouseDownHandler = (e: MouseEvent) => {
+        // Skip mouse handlers for text tool - handled by Canvas.tsx
+        if (this.selectedTool === "text") return;
         this.clicked = true
         this.startX = e.clientX
         this.startY = e.clientY
     }
     mouseUpHandler = (e: MouseEvent) => {
+        // Skip text tool - handled by Canvas.tsx
+        if (this.selectedTool === "text") {
+            this.clicked = false;
+            return;
+        }
         this.clicked = false
         const width = e.clientX - this.startX;
         const height = e.clientY - this.startY;
@@ -152,6 +170,8 @@ export class Game {
     }
     mouseMoveHandler = (e: MouseEvent) => {
         if (!this.ctx) return;
+        // Skip text tool - handled by Canvas.tsx
+        if (this.selectedTool === "text") return;
         if (this.clicked) {
             const width = e.clientX - this.startX;
             const height = e.clientY - this.startY;

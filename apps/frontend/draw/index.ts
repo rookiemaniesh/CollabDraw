@@ -17,6 +17,13 @@ type Shape = {
     startY:number;
     endX:number;
     endY:number;
+} | {
+    type: "text";
+    x: number;
+    y: number;
+    value: string;
+    fontSize: number;
+    color: string;
 }
 
 export async function initDraw(canvas: HTMLCanvasElement, roomId: string, socket: WebSocket) {
@@ -29,6 +36,16 @@ export async function initDraw(canvas: HTMLCanvasElement, roomId: string, socket
     // Initial render of existing shapes
     ctx.strokeStyle = "white";
     clearCanvas(existingShape, canvas, ctx);
+
+    // Function to add shape locally and re-render (for immediate local updates)
+    const addShapeLocally = (shape: Shape) => {
+        existingShape.push(shape);
+        clearCanvas(existingShape, canvas, ctx);
+    };
+
+    // Expose addShapeLocally on window for Canvas.tsx to use
+    //@ts-ignore
+    window.addShapeLocally = addShapeLocally;
 
     socket.onmessage = (event) => {
         const message = JSON.parse(event.data);
@@ -50,6 +67,8 @@ export async function initDraw(canvas: HTMLCanvasElement, roomId: string, socket
             clearCanvas(existingShape, canvas, ctx);
             //@ts-ignore
             const selectedTool=window.selectedTool
+            // Skip text tool - handled by Canvas.tsx
+            if(selectedTool=='text') return;
             if(selectedTool=='rect'){
                 ctx.strokeRect(startX, startY, width, height)
             }
@@ -58,7 +77,7 @@ export async function initDraw(canvas: HTMLCanvasElement, roomId: string, socket
                 const centreY=startY+height/2;
                 const radius=Math.max(width,height)/2
                 ctx.beginPath();
-                ctx.arc(centreX,centreY,radius,0,Math.PI*2)
+                ctx.arc(centreX,centreY,Math.abs(radius),0,Math.PI*2)
                 ctx.stroke();
                 ctx.closePath();
 
@@ -74,17 +93,26 @@ export async function initDraw(canvas: HTMLCanvasElement, roomId: string, socket
     }
 
     const mouseDownHandler = (e: MouseEvent) => {
+        //@ts-ignore
+        const selectedTool = window.selectedTool;
+        // Skip mouse handlers for text tool - handled by Canvas.tsx
+        if (selectedTool === 'text') return;
         clicked = true;
         startX = e.clientX;
         startY = e.clientY;
     }
 
     const mouseUpHandler = (e: MouseEvent) => {
+        //@ts-ignore
+        const selectedTool = window.selectedTool;
+        // Skip text tool - handled by Canvas.tsx
+        if (selectedTool === 'text') {
+            clicked = false;
+            return;
+        }
         clicked = false;
         const width = e.clientX - startX;
         const height = e.clientY - startY;
-        //@ts-ignore
-        const selectedTool=window.selectedTool;
         let shape: Shape |null=null ;
         if(selectedTool=='rect'){
             shape = {
@@ -131,6 +159,8 @@ export async function initDraw(canvas: HTMLCanvasElement, roomId: string, socket
         canvas.removeEventListener("mousedown", mouseDownHandler)
         canvas.removeEventListener("mouseup", mouseUpHandler)
         canvas.removeEventListener("mousemove", mouseMoveHandler)
+        //@ts-ignore
+        delete window.addShapeLocally;
     }
 }
 function clearCanvas(existingShape: Shape[], canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
@@ -151,6 +181,11 @@ function clearCanvas(existingShape: Shape[], canvas: HTMLCanvasElement, ctx: Can
             ctx.lineTo(shape.endX, shape.endY);
             ctx.stroke();
             ctx.closePath();
+        }
+        else if(shape.type=='text'){
+            ctx.font = `${shape.fontSize}px Arial`;
+            ctx.fillStyle = shape.color;
+            ctx.fillText(shape.value, shape.x, shape.y);
         }
       
      })

@@ -1,8 +1,8 @@
 import { initDraw } from "@/draw";
 import { useEffect, useRef, useState } from "react";
-import { Circle, Minus, Pencil, RectangleHorizontal, Share2, MessageSquare, Settings, Shapes } from "lucide-react";
+import { Circle, Minus, Pencil, RectangleHorizontal, Share2, MessageSquare, Settings, Shapes, Type } from "lucide-react";
 
-export type Tool = "rect" | "circle" | "line" | "pencil";
+export type Tool = "rect" | "circle" | "line" | "pencil" | "text";
 
 export default function Canvas({
     roomId,
@@ -14,6 +14,8 @@ export default function Canvas({
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [selectedTool, setSelectedTool] = useState<Tool>("rect");
     const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
+    const [textInput, setTextInput] = useState<{ x: number; y: number; visible: boolean } | null>(null);
+    const textInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         setCanvasSize({ width: window.innerWidth, height: window.innerHeight });
@@ -48,9 +50,90 @@ export default function Canvas({
         //@ts-ignore
         window.selectedTool=selectedTool
     },[selectedTool])
+
+    useEffect(() => {
+        if (textInput?.visible && textInputRef.current) {
+            textInputRef.current.focus();
+        }
+    }, [textInput?.visible])
+
+    const handleTextCommit = (value: string) => {
+        if (!textInput || !value.trim()) {
+            setTextInput(null);
+            return;
+        }
+
+        const shape = {
+            type: "text",
+            x: textInput.x,
+            y: textInput.y,
+            value: value.trim(),
+            fontSize: 16,
+            color: "#ffffff"
+        };
+
+        // Add shape locally immediately for instant rendering (like other shapes)
+        //@ts-ignore
+        if (window.addShapeLocally) {
+            //@ts-ignore
+            window.addShapeLocally(shape);
+        }
+
+        // Also send via WebSocket for synchronization
+        socket.send(JSON.stringify({
+            type: "chat",
+            message: JSON.stringify({ shape }),
+            roomId
+        }));
+
+        setTextInput(null);
+    };
+
+    const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+        if (selectedTool === "text" && canvasRef.current && !textInput?.visible) {
+            const rect = canvasRef.current.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            // Clamp position to stay within canvas bounds
+            const clampedX = Math.max(0, Math.min(x, canvasSize.width - 200));
+            const clampedY = Math.max(0, Math.min(y, canvasSize.height - 40));
+            setTextInput({ x: clampedX, y: clampedY, visible: true });
+        }
+    };
     return (
         <div className="relative h-full w-full overflow-hidden bg-neutral-950">
-            <canvas ref={canvasRef} width={canvasSize.width} height={canvasSize.height}></canvas>
+            <canvas 
+                ref={canvasRef} 
+                width={canvasSize.width} 
+                height={canvasSize.height}
+                onClick={handleCanvasClick}
+            ></canvas>
+            
+            {textInput?.visible && (
+                <input
+                    ref={textInputRef}
+                    type="text"
+                    className="absolute   rounded px-2 py-1 text-white text-base outline-none backdrop-blur-sm"
+                    style={{
+                        left: `${textInput.x}px`,
+                        top: `${textInput.y}px`,
+                        zIndex: 1000,
+                        minWidth: "200px"
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                    onBlur={(e) => handleTextCommit(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            e.preventDefault();
+                            handleTextCommit(e.currentTarget.value);
+                        } else if (e.key === "Escape") {
+                            setTextInput(null);
+                        }
+                    }}
+                    placeholder="Enter Text"
+                    autoFocus
+                />
+            )}
 
             <div className="fixed top-0 left-0 right-0 p-4 flex justify-between items-center bg-neutral-900/90 backdrop-blur-md border-b border-neutral-800 z-50">
                 <div className="flex items-center gap-3">
@@ -83,15 +166,20 @@ export default function Canvas({
                     isActive={selectedTool === "circle"}
                     onClick={() => setSelectedTool("circle")}
                 />
-                <IconButton
+                {/* <IconButton
                     icon={<Pencil className="w-5 h-5" />}
                     isActive={selectedTool === "pencil"}
                     onClick={() => setSelectedTool("pencil")}
-                />
+                /> */}
                 <IconButton
                     icon={<Minus className="w-5 h-5 rotate-45" />}
                     isActive={selectedTool === "line"}
                     onClick={() => setSelectedTool("line")}
+                />
+                <IconButton
+                    icon={<Type className="w-5 h-5" />}
+                    isActive={selectedTool === "text"}
+                    onClick={() => setSelectedTool("text")}
                 />
             </div>
         </div>
