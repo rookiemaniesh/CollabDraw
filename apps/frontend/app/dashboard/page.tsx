@@ -19,7 +19,7 @@ export default function Dashboard() {
                 Authorization: token
             }
         })
-        const roomId=res.data.room.id;
+        const roomId = res.data.room.id;
         // console.log(res)
         router.push(`/canvas/${roomId}`);
     };
@@ -32,31 +32,38 @@ export default function Dashboard() {
     };
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-6">
-            <div className="w-full max-w-4xl space-y-8">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-[#121212] text-white selection:bg-pink-500 selection:text-white font-sans overflow-x-hidden p-6 relative">
+
+            {/* Background Gradients */}
+            <div className="fixed inset-0 z-0 pointer-events-none">
+                <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-pink-500/10 blur-[120px] rounded-full" />
+                <div className="absolute top-[20%] right-[-10%] w-[40%] h-[60%] bg-blue-500/10 blur-[120px] rounded-full" />
+            </div>
+
+            <div className="w-full max-w-4xl space-y-8 relative z-10">
                 <div className="text-center">
                     <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
                         Dashboard
                     </h1>
-                    <p className="mt-4 text-lg text-gray-600">
+                    <p className="mt-4 text-lg text-gray-300">
                         Start a new collaboration or join an existing session.
                     </p>
                 </div>
 
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                     {/* Create Canvas Card */}
-                    <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white p-8 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-[#1E1E1E] p-8 border border-gray-800 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 hover:border-pink-500/50">
+                        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-pink-900/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                         <div className="relative z-10">
-                            <h2 className="text-2xl font-bold text-gray-900">Create Canvas</h2>
-                            <p className="mt-2 text-gray-600">
+                            <h2 className="text-2xl font-bold text-white">Create Canvas</h2>
+                            <p className="mt-2 text-gray-400">
                                 Start a blank canvas and invite others to collaborate in real-time.
                             </p>
                         </div>
                         <div className="relative z-10 mt-8">
                             <button
                                 onClick={handleCreateCanvas}
-                                className="inline-flex w-full items-center justify-center rounded-xl bg-black px-6 py-4 text-sm font-semibold text-white transition-all duration-200 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+                                className="inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-pink-600 to-purple-600 px-6 py-4 text-sm font-semibold text-white transition-all duration-200 hover:from-pink-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 focus:ring-offset-[#1E1E1E]"
                             >
                                 Create New Canvas
                                 <svg className="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -67,11 +74,11 @@ export default function Dashboard() {
                     </div>
 
                     {/* Join Canvas Card */}
-                    <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white p-8 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-                        <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-pink-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-[#1E1E1E] p-8 border border-gray-800 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 hover:border-blue-500/50">
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-cyan-900/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                         <div className="relative z-10">
-                            <h2 className="text-2xl font-bold text-gray-900">Join Canvas</h2>
-                            <p className="mt-2 text-gray-600">
+                            <h2 className="text-2xl font-bold text-white">Join Canvas</h2>
+                            <p className="mt-2 text-gray-400">
                                 Enter a Room ID to jump into an existing collaboration session.
                             </p>
                         </div>
@@ -85,13 +92,13 @@ export default function Dashboard() {
                                         value={roomId}
                                         onChange={(e) => setRoomId(e.target.value)}
                                         placeholder="Enter Room ID"
-                                        className="block w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-black focus:outline-none focus:ring-black sm:text-sm transition-all duration-200"
+                                        className="block w-full rounded-xl border border-gray-700 bg-[#2D2D2D] px-4 py-3 text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm transition-all duration-200"
                                         required
                                     />
                                 </div>
                                 <button
                                     type="submit"
-                                    className="inline-flex w-full items-center justify-center rounded-xl border border-black bg-transparent px-6 py-4 text-sm font-semibold text-black transition-all duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+                                    className="inline-flex w-full items-center justify-center rounded-xl border border-gray-600 bg-transparent px-6 py-4 text-sm font-semibold text-white transition-all duration-200 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-[#1E1E1E]"
                                 >
                                     Join Canvas
                                     <svg className="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

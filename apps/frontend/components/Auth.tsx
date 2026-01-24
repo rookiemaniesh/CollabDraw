@@ -26,11 +26,11 @@ export const Auth = ({ type }: AuthProps) => {
                 password,
                 name: type === "signup" ? name : undefined
             });
-            if(type==="signin"){
+            if (type === "signin") {
                 localStorage.setItem("token", res.data.token);
                 router.push("/dashboard");
 
-            }else{
+            } else {
                 router.push("/signin")
             }
         } catch (error) {
@@ -40,13 +40,19 @@ export const Auth = ({ type }: AuthProps) => {
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 sm:px-6 lg:px-8">
-            <div className="w-full max-w-md space-y-8 rounded-2xl bg-white p-10 shadow-xl">
+        <div className="flex min-h-screen items-center justify-center bg-[#121212] px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+            {/* Background Gradients */}
+            <div className="fixed inset-0 z-0 pointer-events-none">
+                <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-pink-500/10 blur-[120px] rounded-full" />
+                <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-blue-500/10 blur-[120px] rounded-full" />
+            </div>
+
+            <div className="w-full max-w-md space-y-8 rounded-2xl bg-[#1E1E1E] p-10 shadow-xl border border-gray-800 relative z-10">
                 <div className="text-center">
-                    <h2 className="text-4xl font-extrabold tracking-tight text-gray-900">
+                    <h2 className="text-4xl font-extrabold tracking-tight text-white">
                         {type === "signin" ? "Sign in" : "Sign up"}
                     </h2>
-                    <p className="mt-2 text-sm text-gray-600">
+                    <p className="mt-2 text-sm text-gray-400">
                         {type === "signin"
                             ? "Welcome back to CollabBoard"
                             : "Create your account to get started"}
@@ -66,7 +72,7 @@ export const Auth = ({ type }: AuthProps) => {
                                     type="text"
                                     required
                                     onChange={(e) => setName(e.target.value)}
-                                    className="relative block w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-black focus:outline-none focus:ring-black sm:text-sm transition-all duration-200"
+                                    className="relative block w-full rounded-lg border border-gray-700 bg-[#2D2D2D] px-4 py-3 text-white placeholder-gray-500 focus:z-10 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm transition-all duration-200"
                                     placeholder="Full Name"
                                 />
                             </div>
@@ -82,7 +88,7 @@ export const Auth = ({ type }: AuthProps) => {
                                 autoComplete="email"
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                className="relative block w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-black focus:outline-none focus:ring-black sm:text-sm transition-all duration-200"
+                                className="relative block w-full rounded-lg border border-gray-700 bg-[#2D2D2D] px-4 py-3 text-white placeholder-gray-500 focus:z-10 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm transition-all duration-200"
                                 placeholder="Email address"
                             />
                         </div>
@@ -97,7 +103,7 @@ export const Auth = ({ type }: AuthProps) => {
                                 autoComplete="current-password"
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                className="relative block w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-black focus:outline-none focus:ring-black sm:text-sm transition-all duration-200"
+                                className="relative block w-full rounded-lg border border-gray-700 bg-[#2D2D2D] px-4 py-3 text-white placeholder-gray-500 focus:z-10 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm transition-all duration-200"
                                 placeholder="Password"
                             />
                         </div>
@@ -105,9 +111,9 @@ export const Auth = ({ type }: AuthProps) => {
 
                     <div>
                         <button
-                            type="button" // Changed to button to prevent form submission behavior for now
+                            type="button"
                             onClick={handleSubmit}
-                            className="group relative flex w-full justify-center rounded-lg border border-transparent bg-black px-4 py-3 text-sm font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 transition-all duration-200"
+                            className="group relative flex w-full justify-center rounded-lg border border-transparent bg-gradient-to-r from-pink-600 to-purple-600 px-4 py-3 text-sm font-medium text-white hover:from-pink-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 focus:ring-offset-[#1E1E1E] transition-all duration-200"
                         >
                             {type === "signin" ? "Sign in" : "Sign up"}
                         </button>
@@ -115,13 +121,13 @@ export const Auth = ({ type }: AuthProps) => {
                 </div>
 
                 <div className="text-center text-sm">
-                    <p className="text-gray-600">
+                    <p className="text-gray-400">
                         {type === "signin"
                             ? "Don't have an account? "
                             : "Already have an account? "}
                         <Link
                             href={type === "signin" ? "/signup" : "/signin"}
-                            className="font-medium text-black hover:underline transition-all duration-200"
+                            className="font-medium text-blue-400 hover:text-blue-300 hover:underline transition-all duration-200"
                         >
                             {type === "signin" ? "Sign up" : "Sign in"}
                         </Link>
