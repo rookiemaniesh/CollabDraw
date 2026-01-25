@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import { SignupSchema, SigninSchema, RoomSchema } from "@repo/backend-common/types"
 import { prisma } from "@repo/database/db";
-import bcrypt, { hash } from "bcrypt";
+import bcrypt from "bcrypt";
 import 'dotenv/config';
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from '@repo/backendcommon/config'
