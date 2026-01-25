@@ -21,11 +21,11 @@ export const Auth = ({ type }: AuthProps) => {
         const url = type === "signin" ? `${HTTP_BACKEND}/api/auth/signin` : `${HTTP_BACKEND}/api/auth/signup`;
 
         try {
-            const res = await axios.post(url, {
-                email,
-                password,
-                name: type === "signup" ? name : undefined
-            });
+            const payload = type === "signup"
+                ? { email, password, name }
+                : { email, password };
+
+            const res = await axios.post(url, payload);
             if (type === "signin") {
                 localStorage.setItem("token", res.data.token);
                 router.push("/dashboard");
@@ -33,9 +33,10 @@ export const Auth = ({ type }: AuthProps) => {
             } else {
                 router.push("/signin")
             }
-        } catch (error) {
-            console.log(error);
-            alert('Error:' + error);
+        } catch (error: any) {
+            console.log('Full error:', error);
+            console.log('Error response:', error.response?.data);
+            alert('Error: ' + (error.response?.data?.message || error.message));
         }
     }
 
