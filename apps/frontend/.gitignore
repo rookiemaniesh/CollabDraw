@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# Add these lines to .gitignore
+package-lock.json
+npm-debug.log*
+yarn.lock
+
+# Keep pnpm lockfile
+!pnpm-lock.yaml
