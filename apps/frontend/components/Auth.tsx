@@ -1,5 +1,4 @@
 "use client";
-
 import { HTTP_BACKEND } from "@/config";
 import axios from "axios";
 import Link from "next/link";
@@ -9,8 +8,6 @@ import { useState } from "react";
 interface AuthProps {
     type: "signin" | "signup";
 }
-
-
 export const Auth = ({ type }: AuthProps) => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -109,6 +106,12 @@ export const Auth = ({ type }: AuthProps) => {
                             />
                         </div>
                     </div>
+
+                    {type === "signin" && (
+                        <p className="text-xs text-gray-400 text-center">
+                            Demo: demo@gmail.com / abc@123
+                        </p>
+                    )}
 
                     <div>
                         <button
